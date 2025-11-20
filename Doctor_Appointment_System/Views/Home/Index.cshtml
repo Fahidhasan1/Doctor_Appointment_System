@@ -1,8 +1,255 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+<section class="hero-section" id="home">
+    <h1 class="hero-title">Your Health, Our Priority</h1>
+    <p class="hero-description">Book appointments with top doctors at Sunshine Hospital. Easy, Fast & Secure.</p>
+</section>
+
+<!-- Sunshine Hospital Carousel -->
+<section class="hospital-carousel-section">
+    <div class="hospital-carousel-wrapper">
+        <div id="hospitalCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#hospitalCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#hospitalCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#hospitalCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="4000">
+                    <img src="@Url.Content("~/images/hospital1.png")" class="d-block w-100 carousel-image" alt="Sunshine Hospital building exterior">
+                    <div class="carousel-caption d-none d-md-block carousel-overlay">
+                        <h2 class="carousel-hospital-name">Sunshine Hospital</h2>
+                        <p class="carousel-tagline">A modern multi-specialty hospital in the heart of the city.</p>
+                        <a href="#book" class="btn-primary carousel-btn">Book Appointment</a>
+                    </div>
+                </div>
+
+                <div class="carousel-item" data-bs-interval="4000">
+                    <img src="@Url.Content("~/images/hospital2.png")" class="d-block w-100 carousel-image" alt="Sunshine Hospital reception and lobby">
+                    <div class="carousel-caption d-none d-md-block carousel-overlay">
+                        <h2 class="carousel-hospital-name">Warm Reception & Care</h2>
+                        <p class="carousel-tagline">Spacious reception, friendly staff and a patient-first environment.</p>
+                        <a href="#about" class="btn-primary carousel-btn">About Sunshine Hospital</a>
+                    </div>
+                </div>
+
+                <div class="carousel-item" data-bs-interval="4000">
+                    <img src="@Url.Content("~/images/hospital3.png")" class="d-block w-100 carousel-image" alt="Sunshine Hospital doctors team">
+                    <div class="carousel-caption d-none d-md-block carousel-overlay">
+                        <h2 class="carousel-hospital-name">Expert Medical Team</h2>
+                        <p class="carousel-tagline">Experienced consultants and dedicated nurses available 24/7.</p>
+                        <a href="#contact" class="btn-primary carousel-btn">Contact Sunshine Hospital</a>
+                    </div>
+                </div>
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#hospitalCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#hospitalCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="features-section">
+    <div class="container">
+        <h2 class="section-title">Why Choose Us?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">📅</div>
+                <h3 class="feature-title">Easy Booking</h3>
+                <p class="feature-description">Book appointments in just a few clicks. Choose your preferred doctor, date, and time slot.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚡</div>
+                <h3 class="feature-title">Instant Confirmation</h3>
+                <p class="feature-description">Get immediate appointment confirmation via email and SMS notification.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔔</div>
+                <h3 class="feature-title">Smart Reminders</h3>
+                <p class="feature-description">Automatic reminders sent before your appointment so you never miss a visit.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👨‍⚕️</div>
+                <h3 class="feature-title">Qualified Doctors</h3>
+                <p class="feature-description">Access to experienced doctors across multiple specialties.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💳</div>
+                <h3 class="feature-title">Digital Payment</h3>
+                <p class="feature-description">Secure payment options including Bkash and other digital methods.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📱</div>
+                <h3 class="feature-title">24/7 Access</h3>
+                <p class="feature-description">Book and manage your appointments anytime, anywhere.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works-section">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-container">
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <h3 class="step-title">Register/Login</h3>
+                <p class="step-description">Create your account or login to get started</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <h3 class="step-title">Find Doctor</h3>
+                <p class="step-description">Search for doctors by specialty, name, or experience</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">3</div>
+                <h3 class="step-title">Check Availability</h3>
+                <p class="step-description">View available time slots and choose your preferred time</p>
+            </div>
+            <div class="step-item">
+                <div class="step-number">4</div>
+                <h3 class="step-title">Book & Pay</h3>
+                <p class="step-description">Confirm your appointment and make secure payment</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Specialties -->
+<section class="specialties-section">
+    <div class="container">
+        <h2 class="section-title">Browse by Specialty</h2>
+        <div class="specialty-grid">
+            <div class="specialty-card"><h3 class="specialty-name">🫀 Cardiology</h3></div>
+            <div class="specialty-card"><h3 class="specialty-name">🧠 Neurology</h3></div>
+            <div class="specialty-card"><h3 class="specialty-name">👶 Pediatrics</h3></div>
+            <div class="specialty-card"><h3 class="specialty-name">🦴 Orthopedics</h3></div>
+            <div class="specialty-card"><h3 class="specialty-name">👁️ Ophthalmology</h3></div>
+            <div class="specialty-card"><h3 class="specialty-name">🦷 Dentistry</h3></div>
+            <div class="specialty-card"><h3 class="specialty-name">💆 Dermatology</h3></div>
+            <div class="specialty-card"><h3 class="specialty-name">🩺 General Medicine</h3></div>
+        </div>
+    </div>
+</section>
+
+<!-- About Us -->
+<section class="about-section" id="about">
+    <div class="container">
+        <h2 class="section-title">About Us</h2>
+        <div class="about-content">
+            <p class="about-description">
+                Sunshine Hospital is a leading multi-specialty healthcare center dedicated to making medical services accessible to everyone. Through our digital appointment platform, we connect patients with qualified healthcare professionals, ensuring quality care is just a click away. With state-of-the-art facilities, experienced consultants, and compassionate nursing staff, we strive to deliver safe, reliable, and patient-centered care for every visit.
+            </p>
+            <div class="about-highlights">
+                <div class="highlight-item active">
+                    <div class="highlight-icon">🎯</div>
+                    <h3 class="highlight-title">Our Mission</h3>
+                    <p class="highlight-text">
+                        To revolutionize healthcare accessibility by providing seamless, efficient, and reliable appointment booking services. We aim to reduce waiting time, simplify communication with doctors, and create a smoother healthcare journey for every patient.
+                    </p>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-icon">👁️</div>
+                    <h3 class="highlight-title">Our Vision</h3>
+                    <p class="highlight-text">
+                        To become the most trusted hospital platform, bridging the gap between patients and healthcare providers nationwide. We envision a future where quality medical care is available to every individual, regardless of location or background.
+                    </p>
+                </div>
+                <div class="highlight-item">
+                    <div class="highlight-icon">💎</div>
+                    <h3 class="highlight-title">Our Values</h3>
+                    <p class="highlight-text">
+                        Integrity, excellence, and patient-centered care guide everything we do. We believe in transparency, continuous improvement, and treating each patient with empathy, respect, and dignity at every step of their treatment.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact -->
+<section class="contact-section" id="contact">
+    <div class="container">
+        <h2 class="section-title">Contact Us</h2>
+        <div class="contact-container">
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <div class="contact-icon">📍</div>
+                    <h3 class="contact-title">Visit Us</h3>
+                    <p class="contact-info">
+                        Sunshine Hospital<br />
+                        123 Medical Plaza, Gulshan<br />
+                        Dhaka-1212, Bangladesh
+                    </p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">📞</div>
+                    <h3 class="contact-title">Call Us</h3>
+                    <p class="contact-info">
+                        <a href="tel:+8801234567890" class="contact-link">+880 1234-567890</a><br />
+                        <a href="tel:+8801987654321" class="contact-link">+880 1987-654321</a><br />
+                        Mon-Sat: 8AM - 8PM
+                    </p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">✉️</div>
+                    <h3 class="contact-title">Email Us</h3>
+                    <p class="contact-info">
+                        <a href="mailto:info@sunshinehospital.com" class="contact-link">info@sunshinehospital.com</a><br />
+                        <a href="mailto:support@sunshinehospital.com" class="contact-link">support@sunshinehospital.com</a><br />
+                        24/7 Support Available
+                    </p>
+                </div>
+                <div class="contact-card">
+                    <div class="contact-icon">🗺️</div>
+                    <h3 class="contact-title">Find Us on Map</h3>
+                    <p class="contact-info">
+                        View Sunshine Hospital location on the map below.
+                    </p>
+                    <div class="map-wrapper">
+                        <iframe class="map-frame"
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3651.903626228545!2d90.41251851543232!3d23.750885894615105!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3755b8b0ac3d0a5f%3A0x4d7c92ce40938e35!2sGulshan%202%20Circle!5e0!3m2!1sen!2sbd!4v1700000000000!5m2!1sen!2sbd"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats -->
+<section class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number">500+</div>
+            <div class="stat-label">Qualified Doctors</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">50K+</div>
+            <div class="stat-label">Happy Patients</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">20+</div>
+            <div class="stat-label">Specialties</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">24/7</div>
+            <div class="stat-label">Support Available</div>
+        </div>
+    </div>
+</section>

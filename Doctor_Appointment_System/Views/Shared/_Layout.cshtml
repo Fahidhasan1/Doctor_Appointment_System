@@ -1,50 +1,110 @@
-﻿<!DOCTYPE html>
+﻿@using Doctor_Appointment_System.Models
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Doctor_Appointment_System</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Doctor_Appointment_System.styles.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Doctor_Appointment_System</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+    <title>@ViewData["Title"] - Doctor Appointment System</title>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - Doctor_Appointment_System - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <link rel="icon" type="image/png" href="~/images/favicon1.png" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Global site styles (your landing page design) -->
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body class="body-wrapper">
+    <!-- ===== Navigation (shared across all pages) ===== -->
+    <nav class="main-navigation">
+        <div class="nav-container">
+            <a asp-controller="Home" asp-action="Index" class="site-logo">
+                <span class="logo-icon">🏥</span>
+                <span>HealthCare Appointments</span>
+            </a>
+
+            <button class="mobile-menu-toggle" id="mobileMenuBtn" aria-label="Toggle navigation">
+                <span id="menuIcon">☰</span>
+            </button>
+
+            <div class="nav-right" id="navRight">
+                <ul class="nav-menu-list" id="navMenu">
+                    <li class="nav-menu-item">
+                        <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
+                    </li>
+                    <li class="nav-menu-item">
+                        <a href="#about" class="nav-link">About</a>
+                    </li>
+                    <li class="nav-menu-item">
+                        <a href="#contact" class="nav-link">Contact</a>
+                    </li>
+                </ul>
+
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" placeholder="Search doctors, specialties..." />
+                    <button class="search-button">Search</button>
+                </div>
+
+                <ul class="nav-auth-list">
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <!-- When user is logged in -->
+                        <li class="nav-auth-item">
+                            <!-- TODO: change to real dashboard route later -->
+                            <a asp-controller="Home" asp-action="Index" class="auth-link">Dashboard</a>
+                        </li>
+                        <li class="nav-auth-item">
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="d-inline">
+                                <button type="submit" class="auth-link" style="background:none;border:none;padding:0;">
+                                    Logout
+                                </button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <!-- When user is NOT logged in -->
+                        <li class="nav-auth-item">
+                            <a asp-controller="Account" asp-action="Login" class="auth-link">Login</a>
+                        </li>
+                        <li class="nav-auth-item">
+                            <a asp-controller="Account" asp-action="Register" class="auth-link">Register</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== Main page content goes here ===== -->
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- ===== Shared footer ===== -->
+    <footer class="footer-section">
+        <div class="footer-content">
+            <h3 class="footer-title">🏥 HealthCare Appointments</h3>
+            <p class="footer-description">Booking appointments with Sunshine Hospital made simple.</p>
+            <p class="footer-copyright">
+                &copy; @DateTime.UtcNow.Year Doctor Appointment System. All rights reserved.<br />
+                Designed for responsive viewing on mobile, tablet and desktop.
+            </p>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Bootstrap JS bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Global landing-page JS (menu, highlights, etc.) -->
+    <script src="~/js/home.js" asp-append-version="true"></script>
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

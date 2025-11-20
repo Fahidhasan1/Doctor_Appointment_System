@@ -1,23 +1,51 @@
-﻿namespace Doctor_Appointment_System.Models
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Identity;
+
+namespace Doctor_Appointment_System.Models
 {
-    public enum Gender
+    // ---------------------------
+    // Appointment Status Enum
+    // ---------------------------
+    public enum AppointmentStatus
     {
-        Unknown = 0,
-        Male = 1,
-        Female = 2,
-        Other = 3
+        Pending,
+        Accepted,
+        Completed,
+        Cancelled
     }
 
-    public enum BloodGroup
+    // ---------------------------
+    // Payment Status Enum
+    // ---------------------------
+    public enum PaymentStatus
     {
-        Unknown = 0,
-        A_Positive,
-        A_Negative,
-        B_Positive,
-        B_Negative,
-        AB_Positive,
-        AB_Negative,
-        O_Positive,
-        O_Negative
+        Pending,
+        Completed,
+        Failed,
+        Refunded
+    }
+
+    // ---------------------------
+    // Payment Method Enum
+    // ---------------------------
+    public enum PaymentMethod
+    {
+        Bkash,
+        Cash,
+        Card
+    }
+
+    // ---------------------------
+    // Notification Type Enum
+    // ---------------------------
+    public enum NotificationType
+    {
+        NewAppointment,
+        Cancellation,
+        Reminder,
+        General
     }
 }

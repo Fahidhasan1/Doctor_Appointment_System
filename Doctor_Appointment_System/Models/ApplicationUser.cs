@@ -1,33 +1,39 @@
-﻿
+﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Numerics;
 
 namespace Doctor_Appointment_System.Models
 {
+    // Application user based on ASP.NET Core Identity
     public class ApplicationUser : IdentityUser
     {
-        [Required, MaxLength(50)]
-        public string FirstName { get; set; } = string.Empty;
+        [Required]
+        [StringLength(50)]
+        public string FirstName { get; set; } = null!;
 
-        [Required, MaxLength(50)]
-        public string LastName { get; set; } = string.Empty;
+        [Required]
+        [StringLength(50)]
+        public string LastName { get; set; } = null!;
 
+        [DataType(DataType.Date)]
         public DateTime? DateOfBirth { get; set; }
 
-        public Gender Gender { get; set; } = Gender.Unknown;
+        [StringLength(10)]
+        public string? Gender { get; set; }
 
-        [MaxLength(250)]
+        [StringLength(250)]
         public string? PresentAddress { get; set; }
 
-        [MaxLength(250)]
+        [StringLength(250)]
         public string? PermanentAddress { get; set; }
 
-        [MaxLength(20)]
+        [StringLength(50)]
         public string? NID { get; set; }
 
-        [MaxLength(255)]
+        [StringLength(250)]
         public string? ProfilePicturePath { get; set; }
 
         public bool IsActive { get; set; } = true;
@@ -38,17 +44,18 @@ namespace Doctor_Appointment_System.Models
 
         public DateTime? LastLoginDate { get; set; }
 
-        
-        public ICollection<ApplicationUserRole> UserRoles { get; set; }
-            = new List<ApplicationUserRole>();
+        /// <summary>
+        /// Who registered this user (Admin or Receptionist). Null = self-registered patient.
+        /// </summary>
+        public string? RegisteredByUserId { get; set; }
 
-        
-        public AdminProfile? AdminProfile { get; set; }
+        [ForeignKey(nameof(RegisteredByUserId))]
+        public ApplicationUser? RegisteredByUser { get; set; }
 
-        public DoctorProfile? DoctorProfile { get; set; }
-
-        public PatientProfile? PatientProfile { get; set; }
-
-        public ReceptionistProfile? ReceptionistProfile { get; set; }
+        // Navigation
+        public Admin? AdminProfile { get; set; }
+        public Doctor? DoctorProfile { get; set; }
+        public Receptionist? ReceptionistProfile { get; set; }
+        public Patient? PatientProfile { get; set; }
     }
 }

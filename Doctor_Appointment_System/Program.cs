@@ -1,29 +1,172 @@
+﻿using Doctor_Appointment_System.Data;
+using Doctor_Appointment_System.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// -------------------------------------------------------
+//   DATABASE CONNECTION → SQL Server (AppointmentDB)
+//   Make sure appsettings.json has a "DefaultConnection"
+//   pointing to your AppointmentDB in SSMS.
+// -------------------------------------------------------
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
+// -------------------------------------------------------
+//   IDENTITY CONFIGURATION (ApplicationUser + ApplicationRole)
+// -------------------------------------------------------
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
+{
+    // You can relax these for testing if you want
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequiredLength = 6;
+
+    options.User.RequireUniqueEmail = true;
+})
+    .AddEntityFrameworkStores<ApplicationDbContext>()
+    .AddDefaultTokenProviders();
+
+// Configure application cookie (login / access denied paths)
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";           // You will create this controller/view
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.LogoutPath = "/Account/Logout";
+});
+
+// -------------------------------------------------------
+//   MVC + RAZOR PAGES
+// -------------------------------------------------------
 builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+// -------------------------------------------------------
+//   MIDDLEWARE PIPELINE
+// -------------------------------------------------------
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
+// -------------------------------------------------------
+//   ROUTING
+// -------------------------------------------------------
+
+// Default MVC route: /{controller=Home}/{action=Index}/{id?}
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
+
+// Razor Pages (if you later scaffold Identity UI or use RP)
+app.MapRazorPages();
+
+// -------------------------------------------------------
+//   SEED DEFAULT ROLES + INITIAL ADMIN
+//   (Requirement: One Admin is registered initially)
+// -------------------------------------------------------
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedDataAsync(services);
+}
 
 app.Run();
+
+
+// =======================================================
+//   LOCAL FUNCTION: Seed Roles and Default Admin User
+// =======================================================
+async Task SeedDataAsync(IServiceProvider services)
+{
+    var roleManager = services.GetRequiredService<RoleManager<ApplicationRole>>();
+    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+    string[] roleNames = { "Admin", "Doctor", "Receptionist", "Patient" };
+
+    // Create roles if they do not exist
+    foreach (var roleName in roleNames)
+    {
+        var roleExists = await roleManager.RoleExistsAsync(roleName);
+        if (!roleExists)
+        {
+            await roleManager.CreateAsync(new ApplicationRole
+            {
+                Name = roleName
+            });
+        }
+    }
+
+    // Create default Admin user if not exists
+    var adminEmail = "admin@hospital.com";
+    var adminUserName = "admin@hospital.com";
+    var adminPassword = "Admin@123"; // For demo/dev only. Change in production.
+
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
+    {
+        adminUser = new ApplicationUser
+        {
+            UserName = adminUserName,
+            Email = adminEmail,
+            FirstName = "System",
+            LastName = "Admin",
+            EmailConfirmed = true,
+            IsActive = true,
+            CreatedDate = DateTime.UtcNow
+        };
+
+        var createAdminResult = await userManager.CreateAsync(adminUser, adminPassword);
+        if (createAdminResult.Succeeded)
+        {
+            // Assign Admin role
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+
+            // Also create Admin profile record if you want
+            var context = services.GetRequiredService<ApplicationDbContext>();
+
+            // Only add Admin profile if it doesn't exist
+            if (!context.Admins.Any(a => a.UserId == adminUser.Id))
+            {
+                context.Admins.Add(new Admin
+                {
+                    UserId = adminUser.Id,
+                    OfficeNumber = "A-1"
+                });
+
+                await context.SaveChangesAsync();
+            }
+        }
+        else
+        {
+            // Optional: log/handle errors from admin creation
+            // e.g. write to console during development
+            Console.WriteLine("Failed to create default admin user:");
+            foreach (var error in createAdminResult.Errors)
+            {
+                Console.WriteLine($" - {error.Code}: {error.Description}");
+            }
+        }
+    }
+}
