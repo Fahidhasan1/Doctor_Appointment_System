@@ -1,4 +1,5 @@
-﻿* {
+﻿/* RESET & BASE */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -11,7 +12,16 @@
     background: #f5f5f7;
 }
 
-/* Navigation Styles */
+/* GENERIC HELPERS */
+.hidden {
+    display: none !important;
+}
+
+.body-wrapper.auth-open {
+    overflow: hidden;
+}
+
+/* NAVIGATION */
 .main-navigation {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 0.5rem 0;
@@ -47,14 +57,12 @@
     font-size: 1.6rem;
 }
 
-/* Right side (menu + search + auth) */
 .nav-right {
     display: flex;
     align-items: center;
     gap: 2rem;
 }
 
-/* IMPORTANT FIX: remove default UL margins so alignment is clean */
 .nav-menu-list,
 .nav-auth-list {
     display: flex;
@@ -138,6 +146,10 @@
         box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
 
+.auth-link-button {
+    cursor: pointer;
+}
+
 .mobile-menu-toggle {
     display: none;
     background: none;
@@ -148,7 +160,7 @@
     padding: 0.5rem;
 }
 
-/* === Sunshine Hospital Carousel === */
+/* CAROUSEL */
 .hospital-carousel-section {
     background: #f5f5f5;
 }
@@ -184,25 +196,7 @@
     margin-top: 0.5rem;
 }
 
-@media (max-width: 768px) {
-    .carousel-image {
-        height: 260px;
-    }
-
-    .carousel-overlay {
-        padding: 1rem 1.4rem;
-    }
-
-    .carousel-hospital-name {
-        font-size: 1.4rem;
-    }
-
-    .carousel-tagline {
-        font-size: 0.95rem;
-    }
-}
-
-/* Hero Section */
+/* HERO */
 .hero-section {
     background: linear-gradient(135deg, rgba(102, 126, 234, 0.9), rgba(118, 75, 162, 0.9)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%23f0f4f8" width="1200" height="600"/></svg>');
     color: white;
@@ -241,7 +235,7 @@
         box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
 
-/* Features Section */
+/* FEATURES */
 .features-section {
     padding: 80px 20px;
     background: #f9fafb;
@@ -294,7 +288,7 @@
     line-height: 1.6;
 }
 
-/* How It Works */
+/* HOW IT WORKS */
 .how-it-works-section {
     padding: 80px 20px;
     background: white;
@@ -335,7 +329,7 @@
     color: #666;
 }
 
-/* Specialties Section */
+/* SPECIALTIES */
 .specialties-section {
     padding: 80px 20px;
     background: #f9fafb;
@@ -369,7 +363,7 @@
     font-weight: 600;
 }
 
-/* About Section */
+/* ABOUT */
 .about-section {
     padding: 80px 20px;
     background: white;
@@ -450,7 +444,7 @@
         transform: scale(1.1);
     }
 
-/* Contact Section */
+/* CONTACT */
 .contact-section {
     padding: 80px 20px;
     background: #f9fafb;
@@ -522,7 +516,7 @@
     height: 220px;
 }
 
-/* Stats Section */
+/* STATS */
 .stats-section {
     padding: 30px 20px;
     background: linear-gradient(135deg, #667eea, #764ba2);
@@ -554,7 +548,7 @@
     font-size: 1rem;
 }
 
-/* Footer */
+/* FOOTER */
 .footer-section {
     background: #2d3748;
     color: white;
@@ -585,6 +579,7 @@
     line-height: 1.4;
 }
 
+/* ANIMATIONS */
 @keyframes fadeInDown {
     from {
         opacity: 0;
@@ -609,7 +604,157 @@
     }
 }
 
-/* Responsive Design */
+/* AUTH OVERLAY POPUP (MODAL) */
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: auto;
+    padding: 16px;
+}
+
+.auth-overlay-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(4px);
+}
+
+.auth-modal-wrapper {
+    position: relative;
+    z-index: 1501;
+    max-width: 720px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+/* Base card style */
+.auth-modal-card {
+    background: #ffffff;
+    border-radius: 24px;
+    width: 100%;
+    padding: 40px 32px 32px;
+    box-shadow: 0 18px 45px rgba(15, 23, 42, 0.25);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    position: relative;
+    /* Scroll inside card if tall */
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+/* Narrower login card */
+.auth-login-card {
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+/* Wider register card */
+.auth-register-card {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+/* Auth typography and inputs */
+.auth-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.4rem;
+    color: #1f2933;
+}
+
+.auth-subtitle {
+    font-size: 0.98rem;
+    text-align: center;
+    margin-bottom: 1.8rem;
+    color: #6b7280;
+}
+
+.auth-input {
+    border-radius: 12px !important;
+    border: 1px solid #d1d5db;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+}
+
+    .auth-input:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.25);
+    }
+
+.auth-primary-btn {
+    width: 100%;
+    border-radius: 999px;
+    background: #22c55e;
+    border: none;
+    color: #ffffff;
+    padding: 0.9rem 1.2rem;
+    font-weight: 600;
+    font-size: 1rem;
+    margin-top: 0.3rem;
+    transition: all 0.25s ease;
+}
+
+    .auth-primary-btn:hover {
+        background: #16a34a;
+        transform: translateY(-1px);
+        box-shadow: 0 10px 25px rgba(34, 197, 94, 0.35);
+    }
+
+.auth-bottom-text {
+    text-align: center;
+    margin-top: 1.2rem;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.auth-link-inline {
+    color: #4f46e5;
+    text-decoration: none;
+    font-weight: 500;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+    .auth-link-inline:hover {
+        text-decoration: underline;
+    }
+
+.auth-alert {
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.auth-alert-error {
+    background: #fef2f2;
+    color: #b91c1c;
+    border: 1px solid #fecaca;
+}
+
+.auth-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #9ca3af;
+}
+
+    .auth-close-btn:hover {
+        color: #4b5563;
+    }
+
+/* RESPONSIVE */
 @media (max-width: 1024px) {
     .nav-container {
         flex-wrap: nowrap;
@@ -747,6 +892,17 @@
 
     .footer-copyright {
         font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .auth-modal-card {
+        padding: 28px 20px 24px;
+        border-radius: 18px;
+    }
+
+    .auth-title {
+        font-size: 1.6rem;
     }
 }
 

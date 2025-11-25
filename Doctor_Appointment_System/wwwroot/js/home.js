@@ -1,4 +1,4 @@
-﻿// Mobile menu toggle (sidebar)
+﻿// MOBILE NAV TOGGLE
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const navRight = document.getElementById('navRight');
 const menuIcon = document.getElementById('menuIcon');
@@ -9,18 +9,6 @@ if (mobileMenuBtn && navRight && menuIcon) {
         menuIcon.textContent = navRight.classList.contains('open') ? '✕' : '☰';
     });
 
-    // Close sidebar when clicking any nav or auth link
-    const clickToCloseLinks = document.querySelectorAll('.nav-link, .auth-link');
-    clickToCloseLinks.forEach(link => {
-        link.addEventListener('click', function () {
-            if (navRight.classList.contains('open')) {
-                navRight.classList.remove('open');
-                menuIcon.textContent = '☰';
-            }
-        });
-    });
-
-    // Close sidebar when clicking outside on mobile
     document.addEventListener('click', function (event) {
         const isInsideNav = event.target.closest('.nav-container');
         if (!isInsideNav && navRight.classList.contains('open')) {
@@ -30,28 +18,103 @@ if (mobileMenuBtn && navRight && menuIcon) {
     });
 }
 
-// Smooth scroll for in-page links
+// SMOOTH SCROLL FOR IN-PAGE LINKS (about, contact, etc.)
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         const href = this.getAttribute('href');
         if (!href || href === '#') return;
-
         const target = document.querySelector(href);
-        if (target) {
-            e.preventDefault();
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+        if (!target) return;
+
+        e.preventDefault();
+        target.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
+});
+
+// AUTH MODAL LOGIC
+const authOverlay = document.getElementById('authOverlay');
+const loginModal = document.getElementById('loginModal');
+const registerModal = document.getElementById('registerModal');
+
+const navLoginBtn = document.getElementById('navLoginBtn');
+const navRegisterBtn = document.getElementById('navRegisterBtn');
+const heroBookBtn = document.getElementById('heroBookBtn');
+
+const authCloseBtn1 = document.getElementById('authCloseBtn');
+const authCloseBtn2 = document.getElementById('authCloseBtn2');
+
+const authSwitchButtons = document.querySelectorAll('.auth-switch-btn');
+
+function openAuthModal(mode) {
+    if (!authOverlay || !loginModal || !registerModal) return;
+
+    authOverlay.classList.remove('hidden');
+    document.body.classList.add('auth-open');
+
+    if (mode === 'register') {
+        registerModal.classList.remove('hidden');
+        loginModal.classList.add('hidden');
+    } else {
+        loginModal.classList.remove('hidden');
+        registerModal.classList.add('hidden');
+    }
+}
+
+function closeAuthModal() {
+    if (!authOverlay) return;
+    authOverlay.classList.add('hidden');
+    document.body.classList.remove('auth-open');
+}
+
+if (navLoginBtn) {
+    navLoginBtn.addEventListener('click', () => openAuthModal('login'));
+}
+if (navRegisterBtn) {
+    navRegisterBtn.addEventListener('click', () => openAuthModal('register'));
+}
+if (heroBookBtn) {
+    heroBookBtn.addEventListener('click', () => openAuthModal('login'));
+}
+
+if (authCloseBtn1) authCloseBtn1.addEventListener('click', closeAuthModal);
+if (authCloseBtn2) authCloseBtn2.addEventListener('click', closeAuthModal);
+
+// Close by clicking backdrop
+if (authOverlay) {
+    authOverlay.addEventListener('click', function (e) {
+        if (e.target === authOverlay) {
+            closeAuthModal();
+        }
+    });
+}
+
+// Close with ESC key
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+        closeAuthModal();
+    }
+});
+
+// Switch between login <-> register inside modal
+authSwitchButtons.forEach(btn => {
+    btn.addEventListener('click', function () {
+        const target = this.getAttribute('data-target');
+        if (target === 'register') {
+            openAuthModal('register');
+        } else {
+            openAuthModal('login');
         }
     });
 });
 
-// About section cards (Mission / Vision / Values)
-const highlightItems = document.querySelectorAll('.highlight-item');
-highlightItems.forEach(item => {
-    item.addEventListener('click', function () {
-        highlightItems.forEach(i => i.classList.remove('active'));
-        this.classList.add('active');
-    });
-});
+// AUTO-OPEN MODAL BASED ON QUERY STRING (?auth=login / ?auth=register)
+const authFlagEl = document.getElementById('authOpenFlag');
+if (authFlagEl) {
+    const mode = authFlagEl.getAttribute('data-open-auth');
+    if (mode === 'login' || mode === 'register') {
+        openAuthModal(mode);
+    }
+}
