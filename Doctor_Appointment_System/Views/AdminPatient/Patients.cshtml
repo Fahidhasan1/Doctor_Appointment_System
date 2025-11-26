@@ -1,0 +1,98 @@
+﻿@model IEnumerable<Doctor_Appointment_System.Models.Patient>
+
+@{
+    ViewData["Title"] = "Patients";
+    Layout = "_AdminLayout";
+}
+
+<section class="dashboard-main-inner">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h4 mb-0">Patients</h2>
+            <small class="text-muted">All registered patients in the system.</small>
+        </div>
+        <a asp-action="CreatePatient" class="btn btn-primary">
+            + Add New Patient
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Date of Birth</th>
+                                <th>Gender</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var index = 1;
+                            }
+                            @foreach (var patient in Model)
+                            {
+                                var user = patient.User;
+                                var fullName = $"{user.FirstName} {user.LastName}";
+
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@fullName</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.PhoneNumber</td>
+                                    <td>
+                                        @(user.DateOfBirth.HasValue
+                                                                        ? user.DateOfBirth.Value.ToString("dd MMM yyyy")
+                                                                        : "-")
+                                    </td>
+                                    <td>@user.Gender</td>
+                                    <td class="text-end">
+                                        <a asp-action="EditPatient" asp-route-id="@patient.Id" class="btn btn-sm btn-outline-secondary me-1">
+                                            Edit
+                                        </a>
+                                        <a asp-action="DeletePatient" asp-route-id="@patient.Id" class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-4">
+                    <p class="mb-1">No patients found.</p>
+                    <p class="mb-0">
+                        <a asp-action="CreatePatient">Register the first patient</a>.
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</section>

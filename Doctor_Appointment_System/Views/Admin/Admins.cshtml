@@ -1,0 +1,87 @@
+﻿@model IEnumerable<Doctor_Appointment_System.Models.Admin>
+
+@{
+    ViewData["Title"] = "Admins";
+    Layout = "_AdminLayout";
+}
+
+<section class="dashboard-main-inner">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h4 mb-0">Admins</h2>
+            <small class="text-muted">System administrators with full access.</small>
+        </div>
+        <a asp-controller="Admin" asp-action="CreateAdmin" class="btn btn-primary">
+            + Add New Admin
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Created</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var index = 1;
+                            }
+                            @foreach (var admin in Model)
+                            {
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@($"{admin.User.FirstName} {admin.User.LastName}")</td>
+                                    <td>@admin.User.Email</td>
+                                    <td>@admin.User.PhoneNumber</td>
+                                    <td>@admin.User.CreatedDate.ToString("dd MMM yyyy")</td>
+                                    <td class="text-end">
+                                        <a asp-controller="Admin" asp-action="EditAdmin" asp-route-id="@admin.Id" class="btn btn-sm btn-outline-secondary me-1">
+                                            Edit
+                                        </a>
+                                        
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-4">
+                    <p class="mb-1">No admins found.</p>
+                    <p class="mb-0">
+                        <a asp-controller="Admin" asp-action="CreateAdmin">Create the first admin user</a>.
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</section>

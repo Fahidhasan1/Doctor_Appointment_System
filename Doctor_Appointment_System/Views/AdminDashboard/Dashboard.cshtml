@@ -1,0 +1,425 @@
+﻿@model Doctor_Appointment_System.Models.ViewModels.AdminDashboardViewModel
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "_AdminLayout";
+
+    var revenueLabels = Model.MonthlyRevenueByMonth
+        .OrderBy(m => m.Month)
+        .Select(m => m.MonthName)
+        .ToList();
+
+    var revenueValues = Model.MonthlyRevenueByMonth
+        .OrderBy(m => m.Month)
+        .Select(m => m.TotalAmount)
+        .ToList();
+
+    var appointmentLabels = Model.MonthlyAppointmentsByMonth
+        .OrderBy(m => m.Month)
+        .Select(m => m.MonthName)
+        .ToList();
+
+    var appointmentValues = Model.MonthlyAppointmentsByMonth
+        .OrderBy(m => m.Month)
+        .Select(m => m.TotalAppointments)
+        .ToList();
+
+    string TodayLeftText = DateTime.Now.ToString("ddd, dd MMM yyyy");
+    string TodayRightText = DateTime.Now.ToString("dddd, dd MMM yyyy");
+}
+
+<div class="container-fluid py-4 admin-dashboard-container">
+
+    <!-- HEADER -->
+    <h1 class="h4 fw-semibold text-dark mb-4">Admin Dashboard</h1>
+
+
+    <!-- 8 STAT CARDS – 4 PER ROW, EACH CARD CLICKABLE -->
+    <div class="row g-3 mb-4">
+
+        <!-- Total Admin -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <a asp-controller="Admin" asp-action="Admins" class="text-reset text-decoration-none">
+                <div class="stat-card stat-card-admin h-100">
+                    <div class="stat-card-content">
+                        <div class="stat-label">Total Admin</div>
+                        <div class="stat-value">@Model.TotalAdmins</div>
+                        <div class="stat-extra">All system administrators</div>
+                    </div>
+                    <div class="stat-icon">🛡️</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Doctor -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <a asp-controller="AdminDoctor" asp-action="Doctors" class="text-reset text-decoration-none">
+                <div class="stat-card stat-card-doctor stat-card-gradient h-100">
+                    <div class="stat-card-content">
+                        <div class="stat-label">Total Doctor</div>
+                        <div class="stat-value">@Model.TotalDoctors</div>
+                        <div class="stat-extra">Across all specialties</div>
+                    </div>
+                    <div class="stat-icon">👨‍⚕️</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Receptionist -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <a asp-controller="AdminReceptionist" asp-action="Receptionists" class="text-reset text-decoration-none">
+                <div class="stat-card stat-card-receptionist h-100">
+                    <div class="stat-card-content">
+                        <div class="stat-label">Total Receptionist</div>
+                        <div class="stat-value">@Model.TotalReceptionists</div>
+                        <div class="stat-extra">Handling front-desk &amp; booking</div>
+                    </div>
+                    <div class="stat-icon">💁</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Registered Patient -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <a asp-controller="AdminPatient" asp-action="Patients" class="text-reset text-decoration-none">
+                <div class="stat-card stat-card-patient h-100">
+                    <div class="stat-card-content">
+                        <div class="stat-label">Total Registered Patient</div>
+                        <div class="stat-value">@Model.TotalPatients</div>
+                        <div class="stat-extra">Active patient profiles</div>
+                    </div>
+                    <div class="stat-icon">🧑‍🦽</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Specialties -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <a asp-controller="Specialties" asp-action="Index" class="text-reset text-decoration-none">
+                <div class="stat-card stat-card-specialties h-100">
+                    <div class="stat-card-content">
+                        <div class="stat-label">Total Specialties</div>
+                        <div class="stat-value">@Model.TotalSpecialties</div>
+                        <div class="stat-extra">Distinct medical departments</div>
+                    </div>
+                    <div class="stat-icon">🧬</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Total Appointments -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <a href="/Appointments/Index" class="text-reset text-decoration-none">
+                <div class="stat-card stat-card-total-appt h-100">
+                    <div class="stat-card-content">
+                        <div class="stat-label">Total Appointments</div>
+                        <div class="stat-value">@Model.TotalAppointments</div>
+                        <div class="stat-extra">All-time booked appointments</div>
+                    </div>
+                    <div class="stat-icon">📅</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Today's Appointments -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <a href="/Appointments/Today" class="text-reset text-decoration-none">
+                <div class="stat-card stat-card-today-appt h-100">
+                    <div class="stat-card-content">
+                        <div class="stat-label">Today's Appointments</div>
+                        <div class="stat-value">@Model.TodaysAppointmentCount</div>
+                        <div class="stat-extra">Scheduled for today</div>
+                    </div>
+                    <div class="stat-icon">⏰</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Monthly Revenue -->
+        <div class="col-12 col-md-6 col-xl-3">
+            <a href="/Payments/Index" class="text-reset text-decoration-none">
+                <div class="stat-card stat-card-revenue h-100">
+                    <div class="stat-card-content">
+                        <div class="stat-label">Monthly Revenue</div>
+                        <div class="stat-value">৳@Model.MonthlyRevenue.ToString("N0")</div>
+                        <div class="stat-extra">From all digital payments</div>
+                    </div>
+                    <div class="stat-icon">💳</div>
+                </div>
+            </a>
+        </div>
+
+    </div>
+
+    <!-- CHARTS GRID -->
+    <div class="row g-4 mb-4">
+        <!-- Revenue Trend (bar) -->
+        <div class="col-lg-6">
+            <div class="chart-panel card shadow-sm border-0 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="chart-panel-header d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <div class="chart-title">Monthly Revenue Trend</div>
+                            <div class="chart-subtitle text-muted small">Current year total revenue by month</div>
+                        </div>
+                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle">
+                            Current Year
+                        </span>
+                    </div>
+                    <div class="chart-wrapper flex-grow-1">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Appointment Trend (line) -->
+        <div class="col-lg-6">
+            <div class="chart-panel card shadow-sm border-0 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="chart-panel-header d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <div class="chart-title">Appointment Trends</div>
+                            <div class="chart-subtitle text-muted small">Monthly total appointments</div>
+                        </div>
+                        <span class="badge bg-info-subtle text-info border border-info-subtle">
+                            Current Year
+                        </span>
+                    </div>
+                    <div class="chart-wrapper flex-grow-1">
+                        <canvas id="appointmentsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TODAY'S APPOINTMENTS + RECENT ACTIVITY -->
+    <div class="row g-4">
+        <!-- Today's Appointments -->
+        <div class="col-lg-7">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h5 class="card-title mb-0">Today's Appointments</h5>
+                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">
+                            @DateTime.Now.ToString("dd MMM yyyy")
+                        </span>
+                    </div>
+                    <p class="text-muted small mb-3">
+                        Live list of booked visits for today.
+                    </p>
+
+                    @if (Model.TodaysAppointments != null && Model.TodaysAppointments.Any())
+                    {
+                        <div class="table-responsive flex-grow-1">
+                            <table class="table table-sm align-middle mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Patient</th>
+                                        <th>Doctor</th>
+                                        <th>Specialty</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var appt in Model.TodaysAppointments)
+                                    {
+                                        var statusClass = appt.StatusText switch
+                                        {
+                                            "Pending" => "badge bg-warning-subtle text-warning border border-warning-subtle",
+                                            "Confirmed" => "badge bg-success-subtle text-success border border-success-subtle",
+                                            "Completed" => "badge bg-info-subtle text-info border border-info-subtle",
+                                            "Cancelled" => "badge bg-danger-subtle text-danger border border-danger-subtle",
+                                            _ => "badge bg-secondary-subtle text-secondary border border-secondary-subtle"
+                                        };
+
+                                        <tr>
+                                            <td class="fw-semibold">@appt.TimeText</td>
+                                            <td>@appt.PatientName</td>
+                                            <td>@appt.DoctorName</td>
+                                            <td>@appt.SpecialtyName</td>
+                                            <td>
+                                                <span class="@statusClass">
+                                                    @appt.StatusText
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex flex-column justify-content-center align-items-center flex-grow-1 py-4">
+                            <div class="empty-state-icon mb-2">🎉</div>
+                            <h6 class="mb-1">No Appointments Today</h6>
+                            <p class="text-muted small mb-0 text-center">
+                                There are currently no appointments scheduled for today.
+                            </p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="col-lg-5">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div>
+                            <h5 class="card-title mb-0">Recent System Activity</h5>
+                            <div class="text-muted small">Latest events in the system</div>
+                        </div>
+                        <span class="badge bg-success-subtle text-success border border-success-subtle">
+                            +12% vs last month
+                        </span>
+                    </div>
+
+                    <div class="mb-3">
+                        <div class="text-muted small">This Month's Revenue</div>
+                        <div class="h4 mb-0">৳@Model.MonthlyRevenue.ToString("N0")</div>
+                    </div>
+
+                    <ul class="activity-list">
+                        <li class="activity-item">
+                            <span class="activity-dot activity-dot-teal"></span>
+                            <div class="activity-text">
+                                New doctor profile registered.
+                            </div>
+                            <div class="activity-time">5 mins ago</div>
+                        </li>
+                        <li class="activity-item">
+                            <span class="activity-dot activity-dot-orange"></span>
+                            <div class="activity-text">
+                                Several appointments auto-accepted for tomorrow.
+                            </div>
+                            <div class="activity-time">25 mins ago</div>
+                        </li>
+                        <li class="activity-item">
+                            <span class="activity-dot activity-dot-green"></span>
+                            <div class="activity-text">
+                                Appointments cancelled by patients (email &amp; SMS sent).
+                            </div>
+                            <div class="activity-time">1 hour ago</div>
+                        </li>
+                        <li class="activity-item">
+                            <span class="activity-dot"></span>
+                            <div class="activity-text">
+                                Payment settlement received for yesterday's revenue.
+                            </div>
+                            <div class="activity-time">2 hours ago</div>
+                        </li>
+                    </ul>
+
+                    <div class="mt-auto small text-muted pt-3 border-top">
+                        Tip: Review these activities daily to spot unusual trends early.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Revenue chart: BAR, Taka -->
+    <script>
+        (function () {
+            const labels = @Html.Raw(JsonSerializer.Serialize(revenueLabels));
+            const dataValues = @Html.Raw(JsonSerializer.Serialize(revenueValues));
+
+            const ctx = document.getElementById('revenueChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Revenue (৳)',
+                        data: dataValues,
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return '৳' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const value = context.raw || 0;
+                                    return '৳' + value.toLocaleString();
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
+
+    <!-- Appointments chart: LINE -->
+    <script>
+        (function () {
+            const labels = @Html.Raw(JsonSerializer.Serialize(appointmentLabels));
+            const dataValues = @Html.Raw(JsonSerializer.Serialize(appointmentValues));
+
+            const ctx = document.getElementById('appointmentsChart');
+            if (!ctx) return;
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Appointments',
+                        data: dataValues,
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const value = context.raw || 0;
+                                    return value + ' appointments';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        })();
+    </script>
+}

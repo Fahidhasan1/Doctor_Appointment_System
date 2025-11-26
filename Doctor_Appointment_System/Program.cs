@@ -173,6 +173,7 @@
 
 
 using Doctor_Appointment_System.Data;
+using Doctor_Appointment_System.FileServices;
 using Doctor_Appointment_System.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -218,6 +219,8 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true;
     options.ExpireTimeSpan = TimeSpan.FromHours(24);
 });
+
+builder.Services.AddScoped<IFileService, FileService>();
 
 // -------------------------------------------------------
 //   MVC + RAZOR PAGES

@@ -1,0 +1,111 @@
+﻿@model IEnumerable<Doctor_Appointment_System.Models.Doctor>
+
+@{
+    ViewData["Title"] = "Doctors";
+    Layout = "_AdminLayout";
+}
+
+<section class="dashboard-main-inner">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h4 mb-0">Doctors</h2>
+            <small class="text-muted">All registered doctors &amp; their specialties.</small>
+        </div>
+        <a asp-action="CreateDoctor" class="btn btn-primary">
+            + Add New Doctor
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            @if (Model != null && Model.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>#</th>
+                                <th>Doctor Name</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Specialties</th>
+                                <th>Experience</th>
+                                <th>Visit Charge</th>
+                                <th>Availability</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                var index = 1;
+                            }
+                            @foreach (var doctor in Model)
+                            {
+                                var user = doctor.User;
+                                var fullName = $"{user.FirstName} {user.LastName}";
+                                var specialties = doctor.DoctorSpecialties != null
+                                ? string.Join(", ", doctor.DoctorSpecialties.Select(ds => ds.Specialty.SpecialtyName))
+                                : "";
+
+                                <tr>
+                                    <td>@index</td>
+                                    <td>@fullName</td>
+                                    <td>@user.Email</td>
+                                    <td>@user.PhoneNumber</td>
+                                    <td>@specialties</td>
+                                    <td>@doctor.Experience year(s)</td>
+                                    <td>৳@doctor.VisitCharge.ToString("N0")</td>
+
+                                    <td>
+                                        @if (doctor.IsAvailable)
+                                        {
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle">Available</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Not Available</span>
+                                        }
+                                    </td>
+                                    <td class="text-end">
+                                        <a asp-action="EditDoctor" asp-route-id="@doctor.Id" class="btn btn-sm btn-outline-secondary me-1">
+                                            Edit
+                                        </a>
+                                        <a asp-action="DeleteDoctor" asp-route-id="@doctor.Id" class="btn btn-sm btn-outline-danger">
+                                            Delete
+                                        </a>
+                                    </td>
+                                </tr>
+                                index++;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center text-muted py-4">
+                    <p class="mb-1">No doctors found.</p>
+                    <p class="mb-0">
+                        <a asp-action="CreateDoctor">Create the first doctor profile</a>.
+                    </p>
+                </div>
+            }
+        </div>
+    </div>
+</section>

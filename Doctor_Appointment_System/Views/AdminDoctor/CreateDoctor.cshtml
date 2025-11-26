@@ -1,0 +1,217 @@
+﻿@model Doctor_Appointment_System.Models.ViewModels.DoctorFormViewModel
+
+@{
+    ViewData["Title"] = "Create Doctor";
+    Layout = "_AdminLayout";
+}
+
+<section class="dashboard-main-inner">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h4 mb-0">Create Doctor</h2>
+            <small class="text-muted">Add a new doctor with specialties and schedule.</small>
+        </div>
+        <a asp-action="Doctors" class="btn btn-outline-secondary">
+            ← Back to Doctors
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <form asp-action="CreateDoctor" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+                    <!-- Basic Info -->
+                    <div class="col-12">
+                        <h5 class="mb-2">Basic Information</h5>
+                        <hr class="mt-0" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="FirstName" class="form-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="LastName" class="form-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="PhoneNumber" class="form-label"></label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DateOfBirth" class="form-label"></label>
+                        <input asp-for="DateOfBirth" class="form-control" type="date" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Gender" class="form-label"></label>
+                        <select asp-for="Gender" class="form-select">
+                            <option value="">-- Select --</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="PresentAddress" class="form-label"></label>
+                        <textarea asp-for="PresentAddress" class="form-control" rows="2"></textarea>
+                        <span asp-validation-for="PresentAddress" class="text-danger"></span>
+                    </div>
+
+                    <!-- Account Info -->
+                    <div class="col-12 mt-3">
+                        <h5 class="mb-2">Account Details</h5>
+                        <hr class="mt-0" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+
+                    <!-- Professional Info -->
+                    <div class="col-12 mt-3">
+                        <h5 class="mb-2">Professional Information</h5>
+                        <hr class="mt-0" />
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="LicenseNumber" class="form-label"></label>
+                        <input asp-for="LicenseNumber" class="form-control" />
+                        <span asp-validation-for="LicenseNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Qualification" class="form-label"></label>
+                        <input asp-for="Qualification" class="form-control" />
+                        <span asp-validation-for="Qualification" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Experience" class="form-label"></label>
+                        <input asp-for="Experience" class="form-control" />
+                        <span asp-validation-for="Experience" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="VisitCharge" class="form-label"></label>
+                        <input asp-for="VisitCharge" class="form-control" />
+                        <span asp-validation-for="VisitCharge" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="RoomNo" class="form-label"></label>
+                        <input asp-for="RoomNo" class="form-control" />
+                        <span asp-validation-for="RoomNo" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <!-- Specialties -->
+                    <div class="col-12 mt-3">
+                        <h5 class="mb-2">Specialties</h5>
+                        <hr class="mt-0" />
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="SelectedSpecialtyIds" class="form-label"></label>
+                        <select asp-for="SelectedSpecialtyIds"
+                                asp-items="Model.SpecialtyOptions"
+                                class="form-select"
+                                multiple
+                                size="5">
+                        </select>
+                        <span asp-validation-for="SelectedSpecialtyIds" class="text-danger"></span>
+                        <div class="form-text">
+                            Hold Ctrl (Windows) or Cmd (Mac) to select multiple specialties.
+                        </div>
+                    </div>
+
+                    <!-- Availability & Limits -->
+                    <div class="col-12 mt-3">
+                        <h5 class="mb-2">Availability &amp; Appointment Rules</h5>
+                        <hr class="mt-0" />
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-check mt-4">
+                            <input asp-for="IsAvailable" class="form-check-input" />
+                            <label asp-for="IsAvailable" class="form-check-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="MaxAppointmentsPerDay" class="form-label"></label>
+                        <input asp-for="MaxAppointmentsPerDay" class="form-control" />
+                        <span asp-validation-for="MaxAppointmentsPerDay" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-check mt-4">
+                            <input asp-for="AutoAcceptAppointments" class="form-check-input" />
+                            <label asp-for="AutoAcceptAppointments" class="form-check-label"></label>
+                        </div>
+                    </div>
+
+                    <!-- Image -->
+                    <div class="col-12 mt-3">
+                        <h5 class="mb-2">Profile Image</h5>
+                        <hr class="mt-0" />
+                    </div>
+
+                    <div class="col-12">
+                        <label class="form-label">Doctor Photo</label>
+                        <input asp-for="ImageDoctor" class="form-control" type="file" accept="image/*" />
+                        <span asp-validation-for="ImageDoctor" class="text-danger"></span>
+                        <div class="form-text">
+                            Upload a clear professional photo (JPG/PNG).
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <a asp-action="Doctors" class="btn btn-outline-secondary me-2">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Create Doctor
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

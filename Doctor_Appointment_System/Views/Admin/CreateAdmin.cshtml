@@ -1,0 +1,106 @@
+﻿@model Doctor_Appointment_System.Models.ViewModels.AdminUserFormViewModel
+
+@{
+    ViewData["Title"] = "Create Admin";
+    Layout = "_AdminLayout";
+}
+
+<section class="dashboard-main-inner">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h4 mb-0">Create Admin</h2>
+            <small class="text-muted">Add a new administrator with full system access.</small>
+        </div>
+        <a asp-controller="Admin" asp-action="Admins" class="btn btn-outline-secondary">
+            ← Back to Admins
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <form asp-controller="Admin" asp-action="CreateAdmin" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="FirstName" class="form-label"></label>
+                        <input asp-for="FirstName" class="form-control" />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="LastName" class="form-label"></label>
+                        <input asp-for="LastName" class="form-control" />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Email" class="form-label"></label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="PhoneNumber" class="form-label"></label>
+                        <input asp-for="PhoneNumber" class="form-control" />
+                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DateOfBirth" class="form-label"></label>
+                        <input asp-for="DateOfBirth" class="form-control" type="date" />
+                        <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Gender" class="form-label"></label>
+                        <select asp-for="Gender" class="form-select">
+                            <option value="">-- Select --</option>
+                            <option>Male</option>
+                            <option>Female</option>
+                            <option>Other</option>
+                        </select>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-12">
+                        <label asp-for="PresentAddress" class="form-label"></label>
+                        <textarea asp-for="PresentAddress" class="form-control" rows="2"></textarea>
+                        <span asp-validation-for="PresentAddress" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Title" class="form-label"></label>
+                        <input asp-for="Title" class="form-control" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6"></div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Password" class="form-label"></label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="ConfirmPassword" class="form-label"></label>
+                        <input asp-for="ConfirmPassword" class="form-control" />
+                        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-4">
+                    <a asp-controller="Admin" asp-action="Admins" class="btn btn-outline-secondary me-2">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        Create Admin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

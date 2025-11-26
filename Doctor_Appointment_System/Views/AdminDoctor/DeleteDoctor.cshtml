@@ -1,0 +1,70 @@
+﻿@model Doctor_Appointment_System.Models.Doctor
+
+@{
+    ViewData["Title"] = "Delete Doctor";
+    Layout = "_AdminLayout";
+}
+
+<section class="dashboard-main-inner">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h4 mb-0 text-danger">Delete Doctor</h2>
+            <small class="text-muted">
+                Are you sure you want to delete this doctor? The underlying user account will be deactivated.
+            </small>
+        </div>
+        <a asp-action="Doctors" class="btn btn-outline-secondary">
+            ← Back to Doctors
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <strong>Warning:</strong> This action cannot be undone. The doctor record will be removed
+                and the user will no longer be able to log in.
+            </div>
+
+            <dl class="row mb-4">
+                <dt class="col-sm-3">Doctor name</dt>
+                <dd class="col-sm-9">@($"{Model.User.FirstName} {Model.User.LastName}")</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.User.Email</dd>
+
+                <dt class="col-sm-3">Phone</dt>
+                <dd class="col-sm-9">@Model.User.PhoneNumber</dd>
+
+                <dt class="col-sm-3">Specialties</dt>
+                <dd class="col-sm-9">
+                    @if (Model.DoctorSpecialties != null && Model.DoctorSpecialties.Any())
+                    {
+                        @string.Join(", ", Model.DoctorSpecialties.Select(ds => ds.Specialty.SpecialtyName))
+                    }
+                    else
+                    {
+                        <span class="text-muted">No specialties assigned</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-3">Experience</dt>
+                <dd class="col-sm-9">@Model.Experience year(s)</dd>
+
+                <dt class="col-sm-3">Visit charge</dt>
+                <dd class="col-sm-9">@Model.VisitCharge.ToString("C0")</dd>
+            </dl>
+
+            <form asp-action="DeleteDoctor" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Doctors" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        Yes, Delete Doctor
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

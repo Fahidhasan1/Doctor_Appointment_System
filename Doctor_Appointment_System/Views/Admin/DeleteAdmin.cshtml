@@ -1,0 +1,55 @@
+﻿@* @model Doctor_Appointment_System.Models.Admin
+
+@{
+    ViewData["Title"] = "Delete Admin";
+    Layout = "_AdminLayout";
+}
+
+<section class="dashboard-main-inner">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h2 class="h4 mb-0 text-danger">Delete Admin</h2>
+            <small class="text-muted">
+                Are you sure you want to delete this admin? The underlying user account will be deactivated.
+            </small>
+        </div>
+        <a asp-controller="Admin" asp-action="Admins" class="btn btn-outline-secondary">
+            ← Back to Admins
+        </a>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body">
+            <div class="alert alert-warning">
+                <strong>Warning:</strong> This action cannot be undone. The admin record will be removed
+                and the user will no longer be able to log in.
+            </div>
+
+            <dl class="row mb-4">
+                <dt class="col-sm-3">Full name</dt>
+                <dd class="col-sm-9">@($"{Model.User.FirstName} {Model.User.LastName}")</dd>
+
+                <dt class="col-sm-3">Email</dt>
+                <dd class="col-sm-9">@Model.User.Email</dd>
+
+                <dt class="col-sm-3">Phone</dt>
+                <dd class="col-sm-9">@Model.User.PhoneNumber</dd>
+
+                <dt class="col-sm-3">Created on</dt>
+                <dd class="col-sm-9">@Model.User.CreatedDate.ToString("dd MMM yyyy")</dd>
+            </dl>
+
+            <form asp-controller="Admin" asp-action="DeleteAdmin" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex justify-content-between">
+                    <a asp-controller="Admin" asp-action="Admins" class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                    <button type="submit" class="btn btn-danger">
+                        Yes, Delete Admin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section> *@
